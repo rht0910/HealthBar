@@ -2,19 +2,16 @@
 
 package tk.rht0910.health_bar;
 
-import java.math.BigDecimal;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import tk.rht0910.health_bar.thread.EventonDamaged;
 import tk.rht0910.health_bar.thread.ThreadConfig;
 import tk.rht0910.tomeito_core.utils.Log;
 
@@ -52,11 +49,12 @@ public class HealthBar extends JavaPlugin implements Listener {
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		Log.info("Trapped event!");
-		Double double_max_health = null;
+		Thread thread = new Thread(new EventonDamaged(event));
+		thread.start();
+		/*Double double_max_health = null;
 		Double double_health = null;
 		Integer int_health = null;
 		Integer int_max_health = null;
@@ -106,7 +104,7 @@ public class HealthBar extends JavaPlugin implements Listener {
 		e.setCustomNameVisible(true);
 		waitForThreeSeconds();
 		e.setCustomNameVisible(false);
-		e.setCustomName(name);
+		e.setCustomName(name);*/
 	}
 
 	/**
