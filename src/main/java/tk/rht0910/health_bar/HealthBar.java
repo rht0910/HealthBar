@@ -1,16 +1,21 @@
-// The licence notation is under the file.
+// IMPORTANT: The licence notation is under the file.
 
 package tk.rht0910.health_bar;
 
+import java.math.BigDecimal;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.md_5.bungee.api.ChatColor;
-import tk.rht0910.health_bar.config.Config;
+import tk.rht0910.health_bar.thread.ThreadConfig;
+import tk.rht0910.health_bar.thread.ThreadRegisterEvent;
 import tk.rht0910.tomeito_core.utils.Log;
 
 public class HealthBar extends JavaPlugin implements Listener {
@@ -22,10 +27,16 @@ public class HealthBar extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
-		Log.info("Tasks will be run as synchronous task.");
-		Log.info("Running: Load and Save a config");
-		Thread thread = new Thread(new Config());
-		thread.start();
+		Log.info("Tasks will be run as asynchronous task.");
+		Log.info("Tasks:");
+		Log.info(" - Register events");
+		Log.info(" - Load & Save config");
+		Thread event_thread = new Thread(new ThreadRegisterEvent());
+		event_thread.start();
+		Log.info("Running Registering events");
+		Thread config_thread = new Thread(new ThreadConfig());
+		config_thread.start();
+		Log.info("Running load & save configuration");
 		Log.info("Enabled HealthBar by tomeito0110.");
 	}
 
@@ -42,9 +53,88 @@ public class HealthBar extends JavaPlugin implements Listener {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		String entityName = event.getEntity().getName();
+		Double double_max_health = null;
+		Double double_health = null;
+		Integer int_health = null;
+		Integer int_max_health = null;
+		Integer health = null;
+		Integer length = null;
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sb2 = new StringBuilder();
+		String percent = null;
+		String greenbar = ChatColor.GREEN + "|";
+		String graybar = ChatColor.GRAY + "|";
+		String greenhealth = "";
+		String name = "";
+		String total = null;
+		Entity e = event.getEntity();
+		if (e instanceof LivingEntity) {
+			double_health = ((LivingEntity) e).getHealth();
+			double_max_health = ((LivingEntity) e).getMaxHealth();
+			BigDecimal bd_health = new BigDecimal(double_health.toString());
+			BigDecimal bd_max_health = new BigDecimal(double_max_health.toString());
+			int_health = bd_health.setScale(0, BigDecimal.ROUND_HALF_UP).toBigInteger().intValue();
+			int_max_health = bd_max_health.setScale(0, BigDecimal.ROUND_HALF_UP).toBigInteger().intValue();
+		} else {
+			return;
+		}
+		percent = String.format("%.2f",( (double) int_health / (double) int_max_health * 10) ); // Example => 1
+		BigDecimal bd = new BigDecimal(percent);
+		BigDecimal good = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
+		health = good.intValue();
+		for(int i=0;i <= health; i++) {
+			sb.append(greenbar);
+		}
+		length = sb.length();
+		greenhealth = sb.toString();
+		for(int i=0;i<=10-length;i++) {
+			sb2.append(graybar);
+		}
+		total = greenhealth + sb2.toString();
+		if(e.getName().isEmpty() || e.getName() == null) {
+			name = e.getCustomName();
+		} else {
+			name = e.getName();
+		}
+		e.setCustomName("[" + total + "]");
+		e.setCustomNameVisible(true);
+		waitForThreeSeconds();
+		e.setCustomNameVisible(false);
+		e.setCustomName(name);
+	}
+
+	/**
+	 * Waiting for 3 seconds
+	 */
+	public void waitForThreeSeconds() {
+	    long endTime = System.currentTimeMillis() + 3 * 1000; // 3秒後の時間を設定
+	    boolean interrupted = false;
+	    try {
+	        while (true) {
+	            try {
+	                long rest = endTime - System.currentTimeMillis();
+	                if (rest <= 0) {
+	                    return;
+	                } else {
+	                    Thread.sleep(rest);
+	                }
+	            } catch (InterruptedException e) {
+	                interrupted = true; // 一度でも割り込まれたらフラグ設定
+	            }
+	        }
+	    } finally {
+	        // 一度でも割り込まれていれば、割り込みステータスを設定して終了
+	        if (interrupted) {
+	        	try {
+	        		Thread.currentThread().interrupt();
+	        	} catch(SecurityException ex) {
+	        		ex.printStackTrace();
+	        	}
+	        }
+	    }
 	}
 }
 

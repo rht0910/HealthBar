@@ -7,12 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import tk.rht0910.health_bar.HealthBar;
 
-public class Config implements Runnable {
-
-	/**
-	 * Main class for HealthBar.
-	 */
-	private HealthBar hb = null;
+public class Config {
 	public static Boolean enable_healthbar_customname = null;
 	//public static Boolean enable_healthbar_actionbar = null;
 
@@ -39,16 +34,4 @@ public class Config implements Runnable {
 		enable_healthbar_customname = (Boolean) load("enable_healthbar_customname", true);
 		//enable_healthbar_actionbar = (Boolean) load("enable_healthbar_actionbar", false);
 	}
-
-	@Override
-	public void run() {
-		use();
-		hb = HealthBar.getPlugin(HealthBar.class);
-		hb.getConfig().set("enable_healthbar_customname", enable_healthbar_customname);
-		//hb.getConfig().set("enable_healthbar_actionbar", enable_healthbar_actionbar);
-		hb.getConfig().options().copyDefaults(true);
-		hb.saveConfig();
-		hb.reloadConfig();
-	}
-
 }
