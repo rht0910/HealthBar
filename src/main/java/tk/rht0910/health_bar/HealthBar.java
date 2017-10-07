@@ -4,6 +4,7 @@ package tk.rht0910.health_bar;
 
 import java.math.BigDecimal;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tk.rht0910.health_bar.thread.ThreadConfig;
-import tk.rht0910.health_bar.thread.ThreadRegisterEvent;
 import tk.rht0910.tomeito_core.utils.Log;
 
 public class HealthBar extends JavaPlugin implements Listener {
@@ -31,9 +31,8 @@ public class HealthBar extends JavaPlugin implements Listener {
 		Log.info("Tasks:");
 		Log.info(" - Register events");
 		Log.info(" - Load & Save config");
-		Thread event_thread = new Thread(new ThreadRegisterEvent());
-		event_thread.start();
-		Log.info("Running Registering events");
+		Log.info("Running Registering events(sync mode!)");
+		Bukkit.getPluginManager().registerEvents(this, this);
 		Thread config_thread = new Thread(new ThreadConfig());
 		config_thread.start();
 		Log.info("Running load & save configuration");
