@@ -1,6 +1,7 @@
 package tk.rht0910.health_bar.thread;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -17,7 +18,7 @@ public class EventonDamaged implements Runnable {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void run() {
+	public synchronized void run() {
 		Log.info("Running event in thread!");
 		Double double_max_health = null;
 		Double double_health = null;
@@ -68,11 +69,15 @@ public class EventonDamaged implements Runnable {
 		e.setCustomName(name + "[" + total + "]");
 		e.setCustomNameVisible(true);
 		try {
-			this.wait(3000);
-		} catch (InterruptedException e1) {
+			TimeUnit.SECONDS.sleep(3);
+		} catch (Throwable e1) {
 			e1.printStackTrace();
 		}
 		e.setCustomNameVisible(false);
 		e.setCustomName(name);
+	}
+
+	public synchronized void resume() {
+		this.notifyAll();
 	}
 }

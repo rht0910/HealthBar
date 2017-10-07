@@ -51,7 +51,8 @@ public class HealthBar extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		Log.info("Trapped event!");
-		Thread thread = new Thread(new EventonDamaged(event));
+		EventonDamaged ed = new EventonDamaged(event);
+		Thread thread = new Thread(ed);
 		thread.start();
 		/*Double double_max_health = null;
 		Double double_health = null;
