@@ -1,0 +1,14 @@
+name: HealthBar
+main: tk.rht0910.health_bar.HealthBar
+version: 1.0
+depend: [TomeitoLib]
+
+commands:
+   hbar:
+      description: Helps for HealthBar.
+      usage: /<command> [args]
+      permission: healthbar.help
+   healthbar:
+      description: Helps for HealthBar.
+      usage: /<command> [args]
+      permission: healthbar.help
