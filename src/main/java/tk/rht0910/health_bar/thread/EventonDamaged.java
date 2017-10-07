@@ -68,7 +68,7 @@ public class EventonDamaged implements Runnable {
 		e.setCustomName(name + "[" + total + "]");
 		e.setCustomNameVisible(true);
 		try {
-			Thread.sleep(3 * 1000);
+			this.wait(3000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}

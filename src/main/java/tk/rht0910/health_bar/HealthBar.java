@@ -12,7 +12,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tk.rht0910.health_bar.thread.EventonDamaged;
-import tk.rht0910.health_bar.thread.ThreadConfig;
 import tk.rht0910.tomeito_core.utils.Log;
 
 public class HealthBar extends JavaPlugin implements Listener {
@@ -30,9 +29,9 @@ public class HealthBar extends JavaPlugin implements Listener {
 		Log.info(" - Load & Save config");
 		Log.info("Running Registering events(sync mode!)");
 		Bukkit.getPluginManager().registerEvents(this, this);
-		Thread config_thread = new Thread(new ThreadConfig());
-		config_thread.start();
-		Log.info("Running load & save configuration");
+		//Thread config_thread = new Thread(new ThreadConfig());
+		//config_thread.start();
+		Log.info("Running load & save configuration(temporary disabled)");
 		Log.info("Enabled HealthBar by tomeito0110.");
 	}
 
