@@ -99,7 +99,7 @@ public class HealthBar extends JavaPlugin implements Listener {
 		} else {
 			name = e.getName();
 		}
-		e.setCustomName("[" + total + "]");
+		e.setCustomName(name + "[" + total + "]");
 		e.setCustomNameVisible(true);
 		waitForThreeSeconds();
 		e.setCustomNameVisible(false);
