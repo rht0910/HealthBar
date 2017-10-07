@@ -56,6 +56,7 @@ public class HealthBar extends JavaPlugin implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+		Log.info("Trapped event!");
 		Double double_max_health = null;
 		Double double_health = null;
 		Integer int_health = null;
@@ -72,6 +73,7 @@ public class HealthBar extends JavaPlugin implements Listener {
 		String total = null;
 		Entity e = event.getEntity();
 		if (e instanceof LivingEntity) {
+			Log.info("Living entity found!");
 			double_health = ((LivingEntity) e).getHealth();
 			double_max_health = ((LivingEntity) e).getMaxHealth();
 			BigDecimal bd_health = new BigDecimal(double_health.toString());
@@ -79,8 +81,10 @@ public class HealthBar extends JavaPlugin implements Listener {
 			int_health = bd_health.setScale(0, BigDecimal.ROUND_HALF_UP).toBigInteger().intValue();
 			int_max_health = bd_max_health.setScale(0, BigDecimal.ROUND_HALF_UP).toBigInteger().intValue();
 		} else {
+			Log.info("Not living entity");
 			return;
 		}
+		Log.info("percent...");
 		percent = String.format("%.2f",( (double) int_health / (double) int_max_health * 10) ); // Example => 1
 		BigDecimal bd = new BigDecimal(percent);
 		BigDecimal good = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
