@@ -29,8 +29,8 @@ public class HealthBar extends JavaPlugin implements Listener {
 		Log.info(" - Load & Save config");
 		Log.info("Running Registering events(sync mode!)");
 		Bukkit.getPluginManager().registerEvents(this, this);
-		//Thread config_thread = new Thread(new ThreadConfig());
-		//config_thread.start();
+		/*Thread config_thread = new Thread(new ThreadConfig());
+		config_thread.start();*/
 		Log.info("Running load & save configuration(temporary disabled)");
 		Log.info("Enabled HealthBar by tomeito0110.");
 	}

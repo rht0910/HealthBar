@@ -18,7 +18,7 @@ public class EventonDamaged implements Runnable {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
-		Log.info("Trapped event on thread side!");
+		Log.info("Running event in thread!");
 		Double double_max_health = null;
 		Double double_health = null;
 		Integer int_health = null;
