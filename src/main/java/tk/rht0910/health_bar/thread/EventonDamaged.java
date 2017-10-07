@@ -12,8 +12,11 @@ import tk.rht0910.tomeito_core.utils.Log;
 
 public class EventonDamaged implements Runnable {
 	private EntityDamageByEntityEvent event = null;
-	public EventonDamaged(EntityDamageByEntityEvent event) {
+	private String name = "";
+
+	public EventonDamaged(EntityDamageByEntityEvent event, String name) {
 		this.event = event;
+		this.name = name;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -32,7 +35,6 @@ public class EventonDamaged implements Runnable {
 		String greenbar = ChatColor.GREEN + "|";
 		String graybar = ChatColor.GRAY + "|";
 		String greenhealth = "";
-		String name = "";
 		String total = null;
 		Entity e = event.getEntity();
 		if (e instanceof LivingEntity) {
@@ -61,23 +63,15 @@ public class EventonDamaged implements Runnable {
 			sb2.append(graybar);
 		}
 		total = greenhealth + sb2.toString();
-		if(e.getName().isEmpty() || e.getName() == null) {
-			name = e.getCustomName();
-		} else {
-			name = e.getName();
-		}
 		e.setCustomName(name + "[" + total + "]");
 		e.setCustomNameVisible(true);
 		try {
 			TimeUnit.SECONDS.sleep(3);
-		} catch (Throwable e1) {
+		} catch (InterruptedException e1) {
+			Log.warn("Interrupted(Stopped), fixing, Next work...");
 			e1.printStackTrace();
 		}
 		e.setCustomNameVisible(false);
 		e.setCustomName(name);
-	}
-
-	public synchronized void resume() {
-		this.notifyAll();
 	}
 }

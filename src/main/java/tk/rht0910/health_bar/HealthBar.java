@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -50,8 +51,15 @@ public class HealthBar extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+		Entity e = event.getEntity();
 		Log.info("Trapped event!");
-		EventonDamaged ed = new EventonDamaged(event);
+		String name = "";
+		if(e.getName().isEmpty() || e.getName() == null) {
+			name = e.getCustomName();
+		} else {
+			name = e.getName();
+		}
+		EventonDamaged ed = new EventonDamaged(event, name);
 		Thread thread = new Thread(ed);
 		thread.start();
 		/*Double double_max_health = null;
